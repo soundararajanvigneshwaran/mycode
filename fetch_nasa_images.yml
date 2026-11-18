@@ -1,0 +1,18 @@
+---
+- name: Fetch NASA images
+  hosts: localhost
+  tasks:
+    - name: Download two pictures of Earthrise
+      alta3.nasa_images.nasa_images:
+        query: earthrise
+        count: 2
+        dest: /home/student/static
+      register: nasa_result
+
+    - name: Display everything the module returned
+      debug:
+        var: nasa_result
+
+    - name: Display only the title and file of the first picture
+      debug:
+        msg: "{{ nasa_result.images[0].title }} was saved to {{ nasa_result.images[0].path }}"

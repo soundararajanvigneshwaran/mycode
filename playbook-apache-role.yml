@@ -1,0 +1,11 @@
+---
+- name: Apache server installed using a role
+  hosts: web
+  gather_facts: no
+  become: yes
+
+  vars:
+    web_heading: "Welcome to Planet Express!"   # overrides the role's default
+
+  roles:
+    - apache_webserver
