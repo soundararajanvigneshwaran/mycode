@@ -1,0 +1,31 @@
+---
+- name: Playbook - Wednesday challenge    # metadata
+  hosts: planetexpress:!farnsworth   # we want to take the planetexpress group and remove farnsworth
+  connection: ssh     # default is to use the connection plugin ssh.py
+  gather_facts: no   # default is yes
+
+  vars_prompt:
+    - name: dir_name
+      prompt: "what should the new directory be called?"
+      default: "new_default"
+      private: no
+      confirm: yes
+
+  tasks:
+    - name: create the new directory
+      ansible.builtin.file:
+        path: "/home/student/mycode/data_info/{{ dir_name }}"
+        state: directory
+        mode: '0777'
+      become: yes
+
+    - name: put the date in today.txt
+      shell: date > /home/student/mycode/data_info/{{ dir_name }}/today.txt
+
+    - name: read today.txt
+      command: cat /home/student/mycode/data_info/{{ dir_name }}/today.txt
+      register: result
+
+    - name: show today.txt
+      debug:
+        var: result.stdout
